@@ -5,4 +5,4 @@ class Constants():
     def __init__(self):
         self.TITLE = 'Ealge Eye'
         self.SANSAJNENV = '/home/sansajn/Documents/Python/Soft - Project/sample/view'
-        self.PACEENV = ''
+        self.PACEENV = '/Users/50pace/Desktop/soft projekat/sample/view'

@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
+
 # Class representing gui initializer
 class Window(QMainWindow):
 
@@ -16,9 +17,11 @@ class Window(QMainWindow):
     def initiliseUI(self):
 
         self.createActions()
-        self.statusBar()
+       	self.statusBar()
         self.createMenuBar()
         self.createToolBar()
+        self.buttons()
+        
 
         # TODO set size
         self.setGeometry(300, 200, 1500, 900)
@@ -29,14 +32,14 @@ class Window(QMainWindow):
     def createActions(self):
         ### Menu bar ###
         ##TODO Set icons
-        self.exitActMB = QAction(QIcon('exit.png'), '&Exit', self)
+        self.exitActMB = QAction(QIcon('/images/exit.png'), '&Exit', self)
         self.exitActMB.setShortcut('Ctrl+Q')
         self.exitActMB.setStatusTip('Exit application')
         self.exitActMB.triggered.connect(qApp.quit)
 
         ###Toolbar ###
         ##TODO Set icons
-        self.exitActTB = QAction(QIcon('exit24.png'), 'Exit', self)
+        self.exitActTB = QAction(QIcon('/images/exit.png'), 'Exit', self)
         self.exitActTB.setShortcut('Ctrl+Q')
         self.exitActTB.triggered.connect(qApp.quit)
 
@@ -51,5 +54,43 @@ class Window(QMainWindow):
     # Initializing tool bar
     # Allowing easy customization
     def createToolBar(self):
+
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(self.exitActTB)
+        
+
+    # Initializing file chooser
+    def fileChooser(self):
+    	self.filePath = QFileDialog.getOpenFileName(self, 'single file', '/Home')
+    	
+    	#print(self.filePath[0])
+    	
+    	print (self.filePath[0])
+    	return self.filePath[0]
+    	
+
+    # Initializing buttons
+    def buttons(self):
+    	#button for choosing video
+    	self.chooseButton = QPushButton('Browse',self)
+    	self.chooseButton.move(30,50)
+    	self.chooseButton.clicked.connect(self.fileChooser)
+
+    	#play and stop buttons
+    	self.playButton = QPushButton('Play',self)
+    	self.playButton.move(30,100)
+    	self.playButton.clicked.connect(self.play)
+
+    	self.pausePlayButton = QPushButton('Pause/Play',self)
+    	self.pausePlayButton.move(600,720)
+
+    #TODO Make function that will play a video
+    def play(self):
+    	print (self.fileChooser)
+    		
+
+    
+
+
+
+
