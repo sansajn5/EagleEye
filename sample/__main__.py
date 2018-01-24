@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication
 from helpers import Constants
 CONST = Constants()
 
-sys.path.insert(0,CONST.SANSAJNENV)
+sys.path.insert(0,CONST.PACEENV)
 
 # Custom modules
 from window import Window

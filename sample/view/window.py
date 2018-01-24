@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-
+import numpy as np
+import cv2
 
 # Class representing gui initializer
 class Window(QMainWindow):
@@ -55,7 +56,7 @@ class Window(QMainWindow):
 
     # Initializing file chooser
     def fileChooser(self):
-        self.filePath = QFileDialog.getOpenFileName(self, CONST.FILE_SELECTION , CONST.FILE_CHOOSER_DEFAULT)
+        self.filePath = QFileDialog.getOpenFileName(self, self.CONST.FILE_SELECTION , self.CONST.FILE_CHOOSER_DEFAULT)
 
     # Initializing buttons
     def buttons(self):
@@ -74,4 +75,13 @@ class Window(QMainWindow):
 
     # TODO Make function that will play a video
     def play(self):
-        print(self.filePath[0])
+        #print(self.filePath[0])
+        self.cap = cv2.VideoCapture(self.filePath[0])
+        while (self.cap.isOpened()):
+        	ret, frame = self.cap.read()
+        	#self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        	cv2.imshow('frame',frame)
+        	if cv2.waitKey(1) & 0xFF == ord('q'):
+        		break
+        self.cap.release()
+        cv2.destroyAllWindows()	
