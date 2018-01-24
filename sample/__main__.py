@@ -1,10 +1,9 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from helpers import Constants
-CONST = Constants();
-# TODO CHANGE TO PACEENV
-print(sys.path)
-sys.path.insert(0,CONST.PACEENV)
+CONST = Constants()
+
+sys.path.insert(0,CONST.SANSAJNENV)
 
 # Custom modules
 from window import Window
