@@ -78,17 +78,15 @@ class Window(QMainWindow):
     def play(self):
         #print(self.filePath[0])
         self.cap = cv2.VideoCapture(self.filePath[0])
-        #self.width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        #print (self.width)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,320)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT,240)
+        self.fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
+        
         while (self.cap.isOpened()):
-
-        	ret, frame = self.cap.read()
         	
+        	ret, frame = self.cap.read()
+        	self.fgmask = self.fgbg.apply(frame)
 
-        	cv2.imshow('frame',frame)
-        	self.cap.set(5,30)
+        	cv2.imshow('frame',self.fgmask)
+        	
         	if cv2.waitKey(1) & 0xFF == ord('q'):
         		break
         	
