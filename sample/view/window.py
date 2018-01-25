@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 import numpy as np
 import cv2
 
+
 # Class representing gui initializer
 class Window(QMainWindow):
 
@@ -22,7 +23,7 @@ class Window(QMainWindow):
         self.createToolBar()
         self.buttons()
 
-        self.setGeometry(300, 200, 1500, 900)
+        self.setGeometry(100, 500, 400, 200)
         self.setWindowTitle(self.CONST.TITLE)
         self.show()
 
@@ -57,31 +58,42 @@ class Window(QMainWindow):
     # Initializing file chooser
     def fileChooser(self):
         self.filePath = QFileDialog.getOpenFileName(self, self.CONST.FILE_SELECTION , self.CONST.FILE_CHOOSER_DEFAULT)
+        #print(self.filePath)
 
     # Initializing buttons
     def buttons(self):
         # button for choosing video
         self.chooseButton = QPushButton('Browse', self)
-        self.chooseButton.move(30, 50)
+        self.chooseButton.move(150, 50)
         self.chooseButton.clicked.connect(self.fileChooser)
 
         # play and stop buttons
         self.playButton = QPushButton('Play', self)
-        self.playButton.move(30, 100)
+        self.playButton.move(150, 100)
         self.playButton.clicked.connect(self.play)
 
-        self.pausePlayButton = QPushButton('Pause/Play', self)
-        self.pausePlayButton.move(600, 720)
+    
 
     # TODO Make function that will play a video
     def play(self):
         #print(self.filePath[0])
         self.cap = cv2.VideoCapture(self.filePath[0])
+        #self.width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        #print (self.width)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,320)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT,240)
         while (self.cap.isOpened()):
+
         	ret, frame = self.cap.read()
-        	#self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        	
+
         	cv2.imshow('frame',frame)
+        	self.cap.set(5,30)
         	if cv2.waitKey(1) & 0xFF == ord('q'):
         		break
+        	
         self.cap.release()
         cv2.destroyAllWindows()	
+
+
+
