@@ -57,8 +57,8 @@ class Window(QMainWindow):
 
     # Initializing file chooser
     def fileChooser(self):
-        self.filePath = QFileDialog.getOpenFileName(self, self.CONST.FILE_SELECTION , self.CONST.FILE_CHOOSER_DEFAULT)
-        #print(self.filePath)
+        self.filePath = QFileDialog.getOpenFileName(self, self.CONST.FILE_SELECTION, self.CONST.FILE_CHOOSER_DEFAULT)
+        # print(self.filePath)
 
     # Initializing buttons
     def buttons(self):
@@ -72,26 +72,20 @@ class Window(QMainWindow):
         self.playButton.move(150, 100)
         self.playButton.clicked.connect(self.play)
 
-    
-
     # TODO Make function that will play a video
     def play(self):
-        #print(self.filePath[0])
         self.cap = cv2.VideoCapture(self.filePath[0])
         self.fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
-        
+
         while (self.cap.isOpened()):
-        	
-        	ret, frame = self.cap.read()
-        	self.fgmask = self.fgbg.apply(frame)
 
-        	cv2.imshow('frame',self.fgmask)
-        	
-        	if cv2.waitKey(1) & 0xFF == ord('q'):
-        		break
-        	
+            ret, frame = self.cap.read()
+
+            if (cv2.waitKey(1) & 0xFF == ord('q')) or not ret:
+                break
+
+            self.fgmask = self.fgbg.apply(frame)
+            cv2.imshow('frame',self.fgmask)
+
         self.cap.release()
-        cv2.destroyAllWindows()	
-
-
-
+        cv2.destroyAllWindows()
