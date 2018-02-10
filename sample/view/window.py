@@ -93,48 +93,67 @@ class Window(QMainWindow):
         temp.append(p3)
         temp.append(p4)
         results = sorted(temp);
-        if(p1 == results[0]):
+        flag1 = False
+        flag2 = False
+        flag3 = False
+        flag4 = False
+
+        if(p1 == results[0] and flag1 == False):
+            flag1 = True
             print('Racer in first lane is winner')
-        if(p1 == results[1]):
-            print('Racer in first lane won second place')
-        if(p1 == results[2]):
-            print('Racer in first lane won third place')
-        if(p1 == results[3]):
-            print('Racer in fist lane finished last')
-
-        if (p2 == results[0]):
+        if(p1 == results[1] and flag1 == False):
+            flag1 = True
             print('Racer in second lane is winner')
-        if (p2 == results[1]):
-            print('Racer in second lane won second place')
-        if (p2 == results[2]):
-            print('Racer in second lane won third place')
-        if (p2 == results[3]):
-            print('Racer in second lane finished last')
-
-        if (p3 == results[0]):
+        if(p1 == results[2] and flag1 == False):
+            flag1 = True
             print('Racer in third lane is winner')
-        if (p3 == results[1]):
-            print('Racer in third lane won second place')
-        if (p3 == results[2]):
-            print('Racer in third lane won third place')
-        if (p3 == results[3]):
-            print('Racer in third lane finished last')
-
-        if (p4 == results[0]):
+        if(p1 == results[3] and flag1 == False):
             print('Racer in fourth lane is winner')
-        if (p4 == results[1]):
+            flag1 = True
+
+        if (p2 == results[0] and flag2 == False):
+            print('Racer in first lane won second place')
+            flag2 = True
+        if (p2 == results[1] and flag2 == False):
+            flag2 = True
+            print('Racer in second lane won second place')
+        if (p2 == results[2] and flag2 == False):
+            flag2 = True
+            print('Racer in third lane won second place')
+        if (p2 == results[3] and flag2 == False):
             print('Racer in fourth lane won second place')
-        if (p4 == results[2]):
+            flag2 = True
+
+        if (p3 == results[0] and flag3 == False):
+            print('Racer in first lane won third place')
+            flag3 = True
+        if (p3 == results[1] and flag3 == False):
+            flag3 = True
+            print('Racer in second lane won third place')
+        if (p3 == results[2] and flag3 == False):
+            flag3 = True
+            print('Racer in third lane won third place')
+        if (p3 == results[3] and flag3 == False):
             print('Racer in fourth lane won third place')
-        if (p4 == results[3]):
+            flag3 = True
+
+        if (p4 == results[0] and flag4 == False):
+            print('Racer in fist lane finished last')
+            flag4 = True
+        if (p4 == results[1] and flag4 == False):
+            flag4 = True
+            print('Racer in second lane finished last')
+        if (p4 == results[2] and flag4 == False):
+            print('Racer in third lane finished last')
+            flag4 = True
+        if (p4 == results[3] and flag4 == False):
+            flag4 = True
             print('Racer in fourth lane finished last')
 
     # TODO Make function that will play a video
     def play(self):
         # print(self.filePath[0])
-        cap = cv2.VideoCapture('/home/sansajn/Downloads/trke/trka1.mov')
-        cnt_up = 0
-        cnt_down = 0
+        cap = cv2.VideoCapture('/home/sansajn/Downloads/trke/trka3.mov')
         niz = [];
 
         #get width of screen
@@ -181,7 +200,6 @@ class Window(QMainWindow):
 
         #kernel parametars
         kernelOp = np.ones((3, 3), np.uint8)
-        kernelOp2 = np.ones((5, 5), np.uint8)
         kernelCl = np.ones((11, 11), np.uint8)
 
         # Variables
@@ -196,7 +214,6 @@ class Window(QMainWindow):
             fgmask = fgbg.apply(frame)
             fgmask2 = fgbg.apply(frame)
 
-            # fgmask2 = cv2.erode(fgmask2, kernel, iterations=1)
             try:
                 #isolating object
                 ret, imBin = cv2.threshold(fgmask, 240, 255, cv2.THRESH_BINARY)
@@ -224,7 +241,6 @@ class Window(QMainWindow):
                     x, y, w, h = cv2.boundingRect(cnt)
 
                     new = True
-                    # if cy in range(up_limit, down_limit):
                     for i in persons:
                         # checking if person already was detected
                         if abs(cx - i.getX()) <= w and abs(cy - i.getY()) <= h:
@@ -234,8 +250,10 @@ class Window(QMainWindow):
 
                             if(x<263):
                                 i.setTop(x,y+h)
-                                if i not in niz:
-                                    niz.append(i)
+                                if i.getDone() == False:
+                                    if i not in niz:
+                                        i.setDone()
+                                        niz.append(i)
 
                     if new == True:
                         p = Person.MyPerson(pid, cx, cy)
@@ -250,16 +268,7 @@ class Window(QMainWindow):
             for i in persons:
                 cv2.putText(frame, str(i.getId()), (i.getX(), i.getY()), font, 0.3, i.getRGB(), 1, cv2.LINE_AA)
 
-            str_up = 'UP: ' + str(cnt_up)
-            str_down = 'DOWN: ' + str(cnt_down)
             frame = cv2.polylines(frame, [pts_L1], False, (255, 0, 0), thickness=2)
-            frame = cv2.polylines(frame, [pts_L2], False, (0, 0, 255), thickness=2)
-            frame = cv2.polylines(frame, [pts_L3], False, (0, 0, 255), thickness=2)
-            frame = cv2.polylines(frame, [pts_L4], False, (0, 0, 255), thickness=2)
-            cv2.putText(frame, str_up, (10, 40), font, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-            cv2.putText(frame, str_up, (10, 40), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
-            cv2.putText(frame, str_down, (10, 90), font, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-            cv2.putText(frame, str_down, (10, 90), font, 0.5, (255, 0, 0), 1, cv2.LINE_AA)
 
             cv2.imshow('Frame', frame)
             #cv2.imshow('Mask',mask)

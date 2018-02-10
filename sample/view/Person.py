@@ -46,3 +46,6 @@ class MyPerson:
 
     def setDone(self):
         self.done = True
+
+    def getDone(self):
+        return self.done;
